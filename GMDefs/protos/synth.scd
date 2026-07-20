@@ -25,6 +25,7 @@ initParent: { |self, datas|
 	self[\defaultArgs] = ();
 	self[\args] = ();
 	self[\numKernels] = 0;
+	self[\outPlugs] = ();
 
 	// SPECIAL VARIABLES (?)
 	self[\hasAmp] = false;
@@ -242,6 +243,10 @@ initParent: { |self, datas|
 
 			self[\busses][param[\symbol]]
 			= param[\value];
+
+			if(self[\inPlugs].isNil) {
+				self[\inPlugs] = ();
+			};
 		}
 
 		{ \rate } {

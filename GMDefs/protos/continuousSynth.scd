@@ -22,6 +22,7 @@ doPlay: { |self|
 			self[\args].asKeyValuePairs,
 			addAction: \addToTail,
 		);
+		self.emitSignal(\_synthReady);
 	};
 },
 

@@ -597,6 +597,21 @@ setModulatePersistent: { |self, aBoolean|
 	self
 },
 
+plugInto: { |self, synth, outParam = \out, inParam = \in|
+
+	if(self[\outPlugs][outParam].notNil) {
+
+	};
+
+	self[\outPlugs][outParam] = synth;
+
+	self.setParam(
+		outParam,
+		synth[\busses][inParam]
+	);
+	self
+},
+
 /*setFreq: { |self, index, value|
 	if(self[\tunable] and: { index < self[\nBeats] }) {
 		self[\freqs][index] = value;
