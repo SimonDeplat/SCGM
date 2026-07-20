@@ -1,0 +1,428 @@
+# Overview & Installation
+
+## Overview
+
+GMWidgets is a SuperCollider (SC) API which provides a Graphical User Interface (GUI) to the GMDefs API.
+
+Its purpose is to allow you to build your own musical software with ease, letting you decide how it should look like, what kind of controls you'd rather use, and your favorite colors.
+
+## Dependencies & technical purpose
+
+GMWidgets relies on the Graphical Module quark, that provides new widgets to SC. You can install it by evaluating `Quarks.install("GraphicalModule");`. Keep it up-to-date!
+
+GMWidgets doesn't make much sense without GMDefs. As an example, GMDefs allows you to get a synth using `var mySynth = ~gmDefs.getSynth("PresetName")`. You can then control this synth using the commands GMDefs provides. But if you'd rather have a GUI to control the synth, GMWidgets is here to make your life easier (depending on the level of customisation you need).
+
+`var mySynthView = ~gmWidgets.getSynthView(mySynth)` will give you a ready-to-use GUI to make that oscillator go wild! This is also true for the other GMDefs objects (like the Player).
+
+If you're still insatisfied with the result, you can make your own synth view using the built-in widgets (buttons, slider, ...).
+
+## Using GMWidgets
+
+Download the latest version using git, and create a symlink to the directory within your project.
+
+At runtime, simply execute `gmWidgets.scd`. This will push the extension into a global variable, `~gmWidgets`, which gives you access to its functionalities.
+
+Here's a template that will load both GMDefs and GMWidgets :
+
+```
+var folder = thisProcess.nowExecutingPath.dirname;
+
+var loadDependencies;
+loadDependencies = {
+	if(File.exists(folder ++ "/GMDefs/")) {
+		this.executeFile(
+			folder ++
+			"/GMDefs/gmDefs.scd"
+		);
+	} {
+		"GMDefs directory not found".warn;
+	};
+	if(File.exists(folder ++ "/GMWidgets/")) {
+		this.executeFile(
+			folder ++
+			"/GMWidgets/gmWidgets.scd"
+		);
+	} {
+		"GMWidgets directory not found".warn;
+	};
+};
+
+loadDependencies.value;
+
+```
+
+---
+---
+# Quickstart
+
+---
+---
+# Core concepts
+
+## Signals
+
+### Using signals
+
+GMWidgets uses a signal system to provide as much flexibility as possible :
+
+```
+(
+var selector = ~gmWidgets.getSelector;
+selector.states(["A", "B", "C"]);
+selector.state(0);
+selector.connectSignal(
+	\_stateChanged, { |state|
+		state.postln;
+	}
+);
+selector.doFront;
+)
+```
+
+Here, we're instantiating a selector, which, when pressed, emits a `\_stateChanged` signal, passing its new state as argument.
+
+With the `connectSignal` method, we define what action should take place when the signal is emitted : the chosen `Function` will be called, with the argument(s), every time the selector emits the chosen signal.
+
+See the views individual documentation for a list of their individual built-in signals.
+
+It is possible to connect any number of Function to the signal :
+
+```
+(
+var states = ["A", "B", "C"];
+var selector = ~gmWidgets.getSelector;
+selector.states(states);
+selector.state(0);
+selector.connectSignal(
+	\_stateChanged, { |state|
+		state.postln;
+	}
+);
+selector.connectSignal(
+	\_stateChanged, { |state|
+		states[state].postln;
+	}
+);
+selector.doFront;
+)
+```
+
+When not needed anymore, the Function should be disconnected from the signal. This necessitates storing the Function inside a Variable (which is a good practice anyway) :
+
+```
+(
+var states = ["A", "B", "C"];
+
+var selector = ~gmWidgets.getSelector;
+
+var postNewState = { |state|
+	states[state].postln;
+};
+
+selector.states(states);
+selector.state(0);
+
+selector.connectSignal(
+	\_stateChanged,
+	postNewState
+);
+
+selector.disconnectSignal(
+	\_stateChanged,
+	postNewState
+);
+
+selector.doFront;
+)
+```
+
+You can also disconnect all Functions from a signal at once, or completely disconnect every signals :
+
+```
+selector.clearSignal(\_stateChanged);
+selector.clearAllSignals;
+```
+
+### Creating your own signals
+
+Now if you're willing to code your own interface, you can simply copy-paste the signal code block to your prototype, declare the signal dictionary in the `init` method, then use `self.emitSignal(\mySignal, arg);` to do whatever you'd like :
+
+```
+init: { |self|
+	self[\signals] = ();
+	[...]
+},
+
+[...]
+
+doSomething: { |self|
+	self.emitSignal(\mySignal, arg);
+},
+
+[...]
+
+//---------//
+// SIGNALS //
+emitSignal: { |self, symbol, args = nil|
+	if(self[\signals].includesKey(symbol)) {
+		if(args.isNil) {
+			self[\signals][symbol].value;
+		} {
+			self[\signals][symbol].value(args);
+		};
+	};
+},
+
+connectSignal: { |self, symbol, function|
+	if(self[\signals][symbol].isNil) {
+		self[\signals][symbol] = FunctionList();
+	};
+	self[\signals][symbol].addFunc(function);
+	self
+},
+
+disconnectSignal: { |self, symbol, function|
+	if(self[\signals].includesKey(symbol)) {
+		self[\signals][symbol].removeFunc(function);
+	};
+},
+
+clearSignal: { |self, symbol|
+	self[\signals].removeAt(symbol);
+},
+
+clearAllSignals: { |self|
+	self[\signals].clear;
+	self[\signals] = ();
+},
+```
+
+## The Graphical Module Quark
+
+---
+---
+# Prototypes documentation
+
+## Global methods and variables
+
+Some variables and methods are used by the vast majority of the prototypes. Please note that methods are not inherited, they're declared within the file itself to retain complete modularity.
+
+To access a variable, use the `prototype[\variable]` syntax. To call a method, use the `prototype.method(arg)` syntax.
+
+You should be familiar with those variables and methods to use any part of GMWidgets.
+
+### Signals
+
+See the Signals documentation above.
+
+- `[\signals]` an IdentityDictionary
+
+- `emitSignal(Symbol signal, args arguments)`
+
+- `connectSignal(Symbol signal, Function func)`
+
+- `disconnectSignal(Symbol signal, Function func)`
+
+- `clearSignal(Symbol signal)`
+
+- `clearAllSignals`
+
+### View
+
+- `[\view]` The prototype itself is not the view. For example, if you need to insert the view inside a layout, do it like so : `HLayout().add(prototype[\view]);`.
+
+- `setStyles(GMStyle style, GMStyle textStyle, GMStyle widgetStyle)`
+
+Behaves differently depending on the view.
+
+### Misc
+
+- `init`
+
+Creates, intializes and returns the prototype.
+
+- `doFront`
+
+Creates a new window embedding the view. Hitting CmdPeriod will remove the prototype (and thus the window). This is a debugging tool, create your own window when designing your project.
+
+- `doRemove`
+
+Deletes the prototype and its children. It will be garbage collected. Don't forget to call it for every prototype you created when your process ends!
+
+---
+## Abstracts
+
+Abstracts are what you need to quickly design your interfaces. They are premade views that provide a musical functionality such as a synth controller, a tuner, a metronome... They can be interconnected quickly.
+
+In more technical terms, Abstracts are high-level views, that are super specialised into a specific purpose, and as such often complex. For example, the synth view is specialised into controlling a synth, and is composed by lower level views which all dedicate to a particular subtask.
+
+### Synth View
+
+---
+## Widgets
+
+Widgets are GUI base building blocks, such as buttons, sliders, etc. They're basically an enhancement of the Grapical Module widgets : they implement the signal system, some window compostion functionalities, and specific methods that are relevant to the widget type.
+
+---
+### Switch
+
+A multi-state button that increments its state on each press (and resets back to the beginning at the end). See Graphical Module : GMSwitchButton.
+
+#### Methods
+
+- `~gmWidgets.getSwitch;`
+
+- `state(Integer index)`
+
+- `states(Array states)` ```["A", "B", "C"]```
+
+or (svg is optionnal) :
+
+```
+[
+	(
+		string: "A",
+		color: Color.rand,
+		fontColor: Color.black,
+		svg: "path/to/a/file.svg"
+	),
+	(
+		string: "B",
+		color: Color.rand,
+		fontColor: Color.black,
+		svg: "path/to/a/file.svg"
+	),
+]
+```
+
+#### Signals
+
+- `\_stateChanged { Integer newState }`
+
+#### Template
+
+```
+var switchStates, switch, switchAction;
+
+switchStates = ["A", "B", "C"];
+switchAction = { |state|
+	state.postln;
+};
+switch = ~gmWidgets.getSwitch
+.states(switchStates)
+.connectSignal(
+	\_stateChanged,
+	switchAction
+);
+```
+
+
+---
+### Selector
+
+A multi-state button. See Graphical Module : GMMultiButton.
+
+#### Methods
+
+- `~gmWidgets.getSelector;`
+
+- `state(Integer index)`
+
+- `states(Array states)` ```["A", "B", "C"]```
+
+or (svg is optionnal) :
+
+```
+[
+	(
+		string: "A",
+		color: Color.rand,
+		fontColor: Color.black,
+		svg: "path/to/a/file.svg"
+	),
+	(
+		string: "B",
+		color: Color.rand,
+		fontColor: Color.black,
+		svg: "path/to/a/file.svg"
+	),
+]
+```
+
+- `orientation(Symbol orientation)` `\horizontal` or `\vertical`
+
+#### Signals
+
+- `\_stateChanged { Integer newState }`
+
+#### Template
+
+```
+var selectorStates, selector, selectorAction;
+
+selectorStates = ["A", "B", "C"];
+selectorAction = { |state|
+	state.postln;
+};
+selector = ~gmWidgets.getSelector
+.states(selectorStates)
+.connectSignal(
+	\_stateChanged,
+	selectorAction
+);
+```
+
+---
+### Slider
+
+A slider. See Graphical Module : GMFaderSlider.
+
+#### Methods
+
+- `~gmWidgets.getSlider;`
+
+- `min(Number minValue)`
+
+- `max(Number maxValue)`
+
+- `scale(Symbol/Number scale` `\lin`, `\exp`, `\log` or a Number representing a curvature value
+
+- `setValue(Number value)`
+
+#### Signals
+
+- `\_valueChanged { Number newValue }`
+
+#### Template
+
+```
+var slider, sliderAction;
+
+sliderAction = { |value|
+	value.postln;
+};
+slider = ~gmWidgets.getSlider
+.min(220)
+.max(440)
+.scale(\exp)
+.setValue(330)
+.connectSignal(
+	\_valueChanged,
+	sliderAction
+);
+```
+
+---
+## Tools
+
+Tools are mid-level views that are used by Abstracts or other Tools, and specialised to a specific task. They're not supposed to be instantiated manually unless you're designing your own Abstract. The best example is the Param Manager : it is the subpart of the Synth View which is responsible for creating a view for each parameter of the synth. Each type of param (discrete, continuous, tempo related, ...) also has his own Tool. In turn, those Tools are mostly composed with Widgets.
+
+#### Param Manager
+
+---
+---
+# Technical informations
+
+## Prototypes
+
+GMWidgets follows an OOP paradigm. However, the Objects are not compiled : they are interpreted. Traditionnally, this means they're not Objects, they're Prototypes. This gives flexibility when developping (one doesn't need to recompile, which in turns stops SC's server). But this increases CPU load and takes more time to execute. It also has several side effects on available method names, or on debugging feedback.

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="128"
+   height="128"
+   viewBox="0 0 33.866667 33.866664"
+   version="1.1"
+   id="svg1"
+   inkscape:version="1.4.3 (0d15f75042, 2025-12-25)"
+   sodipodi:docname="tracker.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#505050"
+     bordercolor="#eeeeee"
+     borderopacity="1"
+     inkscape:showpageshadow="0"
+     inkscape:pageopacity="0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="px"
+     inkscape:zoom="2.7438272"
+     inkscape:cx="31.525309"
+     inkscape:cy="-6.0134982"
+     inkscape:window-width="1920"
+     inkscape:window-height="1035"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1"
+     showgrid="false" />
+  <defs
+     id="defs1" />
+  <g
+     inkscape:label="Calque 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(0,-263.13332)">
+    <path
+       id="rect2"
+       style="baseline-shift:baseline;display:inline;overflow:visible;vector-effect:none;fill:#ffffff;stroke-linecap:round;paint-order:fill markers stroke;enable-background:accumulate;stop-color:#000000;stop-opacity:1;opacity:1"
+       d="M 2.6230956 272.66194 L 2.6230956 287.47085 L 31.24202 287.47085 L 31.24202 272.66194 L 2.6230956 272.66194 z M 3.6230345 273.66188 L 30.242081 273.66188 L 30.242081 286.47091 L 3.6230345 286.47091 L 3.6230345 273.66188 z M 11.6427 275.86536 C 9.3277116 275.86536 7.4393389 277.75166 7.4393389 280.06665 C 7.4393389 282.38163 9.3277116 284.2695 11.6427 284.2695 C 13.957688 284.2695 15.843994 282.38163 15.843994 280.06665 C 15.843994 277.75166 13.957688 275.86536 11.6427 275.86536 z M 11.6427 276.8653 C 13.417248 276.8653 14.843538 278.2921 14.843538 280.06665 C 14.843538 281.84119 13.417248 283.26956 11.6427 283.26956 C 9.8681517 283.26956 8.4392779 281.84119 8.4392779 280.06665 C 8.4392779 278.2921 9.8681517 276.8653 11.6427 276.8653 z M 22.224999 279.01607 A 1.0505949 1.0505949 0 0 0 21.174417 280.06665 A 1.0505949 1.0505949 0 0 0 22.224999 281.11723 A 1.0505949 1.0505949 0 0 0 23.275581 280.06665 A 1.0505949 1.0505949 0 0 0 22.224999 279.01607 z " />
+  </g>
+</svg>

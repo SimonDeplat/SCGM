@@ -1,0 +1,71 @@
+(
+var idDict = (
+	name: "LHPF",
+	symbol: \gmLHPF,
+	category: \equalisation,
+	type: \effect,
+	emission: \continuous,
+	tunable: false,
+	dependencies: nil,
+
+	params: [
+
+		(
+			type: \in,
+			symbol: \in,
+			numChannels: 2,
+			text: "in",
+		),
+
+		(
+			type: \continuous,
+			symbol: \hpFreq,
+			default: 20,
+			min: 20,
+			max: 20000,
+			scale: \exp,
+			text: "low cut",
+			modSteps: [0.01, 0.001],
+			// DisplayFunc
+			displayFunction: { |value|
+				value = value.asInteger;
+				value = value.asString ++ "hz";
+				value
+			},
+		),
+
+		(
+			type: \continuous,
+			symbol: \lpFreq,
+			default: 20000,
+			min: 20,
+			max: 20000,
+			scale: \exp,
+			text: "high cut",
+			modSteps: [0.01, 0.001],
+			// DisplayFunc
+			displayFunction: { |value|
+				value = value.asInteger;
+				value = value.asString ++ "hz";
+				value
+			},
+		),
+
+		(
+			type: \out,
+			symbol: \out,
+			numChannels: 2,
+			text: "out",
+		),
+	]
+);
+
+SynthDef(\gmLHPF, { |out = 0, in, lpFreq = 20000, hpFreq = 20|
+	var snd = In.ar(in, 2);
+	snd = LPF.ar(snd, lpFreq);
+	snd = HPF.ar(snd, hpFreq);
+	Out.ar(out, snd);
+}).add;
+
+idDict
+)
