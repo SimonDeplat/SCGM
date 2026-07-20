@@ -94,6 +94,7 @@ init: { |self|
 },
 
 setRhythm: { |self, rhythm|
+	var newMul;
 	var states = List(0);
 
 	if(self[\rhythm].notNil) {
@@ -136,6 +137,35 @@ setRhythm: { |self, rhythm|
 		},
 		self
 	);
+
+	newMul = rhythm[\mul];
+	if(rhythm[\depth] > 0) {
+		newMul = newMul / rhythm[\player][\divisions][rhythm[\depth] - 1];
+	};
+
+	if([1, 2, 4].includesEqual(newMul)) {
+		self[\mulSwitch].state(
+			[1, 2, 4].indexOfEqual(newMul);
+		);
+	};
+
+	rhythm.connectSignal(
+		\_mulChanged,
+		{ |mul|
+			if(rhythm[\depth] > 0) {
+				mul = mul / rhythm[\player][\divisions][rhythm[\depth] - 1];
+			};
+
+			if([1, 2, 4].includesEqual(mul)) {
+				self[\mulSwitch].state(
+					[1, 2, 4].indexOfEqual(mul);
+				);
+			};
+		},
+		self
+	);
+
+
 
 	// FIX ME: other muls
 
