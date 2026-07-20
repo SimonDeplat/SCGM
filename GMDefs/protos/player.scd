@@ -24,7 +24,7 @@ initFreq: { |self|
 initRhythm: { |self|
 	self[\bpm] = 60;
 	self[\beat] = 0;
-	self[\divisions] = [4, 4, 2, 2];
+	self[\divisions] = [4, 4, 4, 4];
 	self[\clock] = TempoClock.tempo_(
 		self[\bpm] / 60
 	);
