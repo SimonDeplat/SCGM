@@ -54,11 +54,24 @@ unbindRhythm: { |self, depth = 0, size = 1, offset = 0|
 
 // FIX ME: PLAYER CHANGED
 setPlayer: { |self, player|
+	if(self[\player].notNil) {
+		self[\player].disconnectNode(self);
+	};
 	self[\player] = player;
 	self.updateSize;
 	player.connectSignal(
-		\_divChanged,
-		{ self.updateSize; },
+		\_rhythmChanged,
+		{
+			if(self[\bound]) {
+				if(self[\depth] > 1) {
+					self.setMul(
+						self[\player][\divisions][self[\depth] - 1];,
+						false
+					);
+				};
+			};
+			self.updateSize;
+		},
 		self
 	);
 	self
@@ -92,6 +105,13 @@ setMul: { |self, mul, update = true|
 	self
 },
 
+setDepthMul: { |self, depth, mul|
+	self.setMul(mul, false);
+	self.setDepth(depth, false);
+	self.updateSize;
+	self
+},
+
 setOffset: { |self, offset|
 	if(self[\offset] != offset) {
 		self[\offset] = offset;
@@ -113,6 +133,7 @@ updateSize: { |self|
 		self[\size] =
 		self[\player][\divisions][self[\depth]]
 		* self[\mul];
+
 		if(self[\size] != currentSize) {
 			self.emitSignal(
 				\_sizeChanged,

@@ -25,6 +25,13 @@ init: { |self|
 		"Chromatic",
 	];
 
+	self[\rhythms] = [
+		[4, 4, 4, 4],
+		[4, 2, 6, 2],
+		[4, 2, 9, 2],
+		[4, 3, 4, 2],
+	].asList;
+
 	self.initView;
 
 	self
@@ -43,6 +50,7 @@ initView: { |self|
 	self.initTapTempo;
 	self.initNoteSelector;
 	self.initScaleSelector;
+	self.initRhythmSwitch;
 
 	self[\view] = UserView()
 	.acceptsMouseOver_(true)
@@ -64,7 +72,9 @@ initView: { |self|
 			.margins_(0)
 			.spacing_(0)
 			.add(self[\playStopButton][\view], 1)
-			.add(self[\tapTempo][\view], 1), 2
+			.add(self[\tapTempo][\view], 5)
+			.add(self[\rhythmSwitch][\view], 1),
+			2
 		)
 	);
 
@@ -113,9 +123,31 @@ initScaleSelector: { |self|
 	.connectSignal(
 		\_stateChanged,
 		{ |index|
-			self[\player].setScale(
-				self[\scales][index]
-			);
+			if(self[\player].notNil) {
+				self[\player].setScale(
+					self[\scales][index]
+				);
+			};
+		},
+		self
+	);
+},
+
+initRhythmSwitch: { |self|
+	self[\rhythmSwitch] = ~gmWidgets.getSwitch
+	.states(
+		self[\rhythms].collect({ |item|
+			item.asString
+		})
+	)
+	.connectSignal(
+		\_stateChanged,
+		{ |index|
+			if(self[\player].notNil) {
+				self[\player].setRhythm(
+					self[\rhythms][index]
+				);
+			};
 		},
 		self
 	);
@@ -169,7 +201,30 @@ connectPlayer: { |self, player|
 	);
 	self.updateScale(player[\scale]);
 
+	self.updateRhythms;
+	player.connectSignal(
+		\_rhythmChanged,
+		{ self.updateRhythms; },
+		self
+	);
+
 	self
+},
+
+updateRhythms: { |self|
+	if(self[\player].notNil) {
+		if(self[\rhythms].includesEqual(self[\player][\divisions]).not) {
+			self[\rhythms].add(self[\player][\divisions]);
+			self[\rhythmSwitch].states(
+				self[\rhythms].collect({ |item|
+					item.asString
+				})
+			);
+		};
+		self[\rhythmSwitch].state(
+			self[\rhythms].indexOfEqual(self[\player][\divisions])
+		);
+	};
 },
 
 updateScale: { |self, scale|

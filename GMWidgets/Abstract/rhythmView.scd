@@ -26,16 +26,14 @@ init: { |self|
 		{ |state|
 			var mul;
 			if(self[\rhythm].notNil) {
-				self[\rhythm].setDepth(state);
 				if(state == 0) {
 					mul = [1, 2, 4][self[\currentMulState]];
 				} {
 					mul =
-					self[\rhythm][\player][\divisions]
-					[self[\rhythm][\depth] - 1]
+					self[\rhythm][\player][\divisions][state - 1]
 					* [1, 2, 4][self[\currentMulState]];
 				};
-				self[\rhythm].setMul(mul);
+				self[\rhythm].setDepthMul(state, mul);
 			};
 		},
 		self
@@ -138,6 +136,21 @@ setRhythm: { |self, rhythm|
 		},
 		self
 	);
+
+	// FIX ME: other muls
+
+	/*self[\depthSwitch]
+	.state([1, 2, 4].indexOfEqual(rhythm[\mul]));
+
+	rhythm.connectSignal(
+		\_mulChanged,
+		{ |mul|
+			self[\mulSwitch].state(
+				[1, 2, 4].indexOfEqual(mul)
+			);
+		},
+		self
+	);*/
 
 	// TO DO: connect \_mulChanged signal
 },
