@@ -92,7 +92,7 @@ SynthDef(\gmReverb, { |out = 0, in,
 	effect = effect * wet;
 	snd = snd + effect;
 
-	snd = snd + effect;
+	snd = snd * amp;
 	Out.ar(out, snd);
 }).add;
 
