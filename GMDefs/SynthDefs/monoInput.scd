@@ -4,6 +4,7 @@ var idDict = (
 	symbol: \mhMonoIn,
 	category: \input,
 	type: \input,
+	group: \synth,
 	numChannels: 2,
 	tunable: false,
 

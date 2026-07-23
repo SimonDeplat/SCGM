@@ -5,6 +5,7 @@ var idDict = (
 	category: \drone,
 	type: \synth,
 	emission: \continuous,
+	group: \synth,
 	tunable: false,
 	dependencies: nil,
 

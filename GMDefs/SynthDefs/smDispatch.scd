@@ -5,6 +5,7 @@ var idDict = (
 	category: \dispatch,
 	type: \dispatch,
 	emission: \continuous,
+	group: \filter,
 	tunable: false,
 	dependencies: nil,
 

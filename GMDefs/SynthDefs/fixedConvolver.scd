@@ -5,6 +5,7 @@ var idDict = (
 	category: \effect,
 	type: \effect,
 	emission: \continuous,
+	group: \filter,
 	tunable: false,
 	dependencies: nil,
 

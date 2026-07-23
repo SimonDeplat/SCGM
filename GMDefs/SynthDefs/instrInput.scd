@@ -5,6 +5,7 @@ var idDict = (
 	category: \input,
 	type: \input,
 	emission: \continuous,
+	group: \synth,
 	tunable: false,
 	dependencies: nil,
 

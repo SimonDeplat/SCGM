@@ -1,12 +1,13 @@
 (
 var idDict = (
 	name: "RHPF",
-	symbol: \mhRHPF,
+	symbol: \gmRHPF,
 	category: \equalisation,
 	type: \effect,
+	emission: \continuous,
+	group: \filter,
 	tunable: false,
 	dependencies: nil,
-	numChannels: 2,
 
 	params: [
 
@@ -46,10 +47,16 @@ var idDict = (
 			modSteps: [0.01, 0.001],
 		),
 
+		(
+			type: \out,
+			symbol: \out,
+			numChannels: 2,
+			text: "out",
+		),
 	]
 );
 
-SynthDef(\mhRHPF, { |out = 0, inBus, freq = 5000, rq = 1|
+SynthDef(\gmRHPF, { |out = 0, inBus, freq = 5000, rq = 1|
 	var snd = In.ar(inBus, 2);
 	snd = RLPF.ar(snd, freq, rq);
 	Out.ar(out, snd);

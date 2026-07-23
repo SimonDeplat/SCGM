@@ -5,6 +5,7 @@ var idDict = (
 	category: \synth,
 	type: \synth,
 	emission: \discrete,
+	group: \synth,
 	tunable: true,
 	dependencies: nil,
 

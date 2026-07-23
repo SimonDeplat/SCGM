@@ -4,6 +4,7 @@ var idDict = (
 	symbol: \mhPercSine,
 	category: \electro,
 	type: \discrete,
+	group: \synth,
 	tunable: true,
 	dependencies: nil,
 	numChannels: 2,

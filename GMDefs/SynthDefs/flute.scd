@@ -11,6 +11,7 @@ var idDict = (
 	category: \lead,
 	type: \lead,
 	emission: \discrete,
+	group: \synth,
 	tunable: true,
 	dependencies: nil,
 

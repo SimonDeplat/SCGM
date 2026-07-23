@@ -5,6 +5,7 @@ var idDict = (
 	category: \file,
 	type: \filePlayer,
 	emission: \discrete,
+	group: \synth,
 	tunable: false,
 	dependencies: nil,
 

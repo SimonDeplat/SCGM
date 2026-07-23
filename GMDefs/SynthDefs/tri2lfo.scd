@@ -1,12 +1,13 @@
 (
 var idDict = (
 	name: "Tri²LFO",
-	symbol: \mhTri2LFO,
+	symbol: \gmTri2LFO,
 	category: \misc,
 	type: \effect,
+	emission: \continuous,
+	group: \filter,
 	tunable: false,
 	dependencies: nil,
-	numChannels: 2,
 
 	params: [
 
@@ -74,10 +75,17 @@ var idDict = (
 				value
 			},
 		),
+
+		(
+			type: \out,
+			symbol: \out,
+			numChannels: 2,
+			text: "out",
+		),
 	]
 );
 
-SynthDef(\mhTri2LFO, { |out = 0, inBus, amount = 0,
+SynthDef(\gmTri2LFO, { |out = 0, inBus, amount = 0,
 	rate = 1, phase = 0, power = 1|
 	var snd, lfo;
 	snd = In.ar(inBus, 2);

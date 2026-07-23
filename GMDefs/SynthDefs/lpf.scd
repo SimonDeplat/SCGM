@@ -1,18 +1,19 @@
 (
 var idDict = (
 	name: "LPF",
-	symbol: \mhLPF,
+	symbol: \gmLPF,
 	category: \equalisation,
 	type: \effect,
+	emission: \continuous,
+	group: \filter,
 	tunable: false,
 	dependencies: nil,
-	numChannels: 2,
 
 	params: [
 
 		(
 			type: \in,
-			symbol: \inBus,
+			symbol: \in,
 			numChannels: 2,
 			text: "in",
 		),
@@ -32,10 +33,17 @@ var idDict = (
 				value
 			},
 		),
+
+		(
+			type: \out,
+			symbol: \out,
+			numChannels: 2,
+			text: "out",
+		),
 	]
 );
 
-SynthDef(\mhLPF, { |out = 0, inBus, freq = 5000|
+SynthDef(\gmLPF, { |out = 0, in, freq = 5000|
 	var snd = In.ar(inBus, 2);
 	snd = LPF.ar(snd, freq);
 	Out.ar(out, snd);

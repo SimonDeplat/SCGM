@@ -1,12 +1,13 @@
 (
 var idDict = (
 	name: "PWM",
-	symbol: \mhPWM,
+	symbol: \gmPWM,
 	category: \electro,
 	type: \discrete,
+	emission: \discrete,
+	group: \synth,
 	tunable: true,
 	dependencies: nil,
-	numChannels: 2,
 
 	params: [
 		(
@@ -142,10 +143,17 @@ var idDict = (
 			text: "freq mul.",
 			texts: ["x8", "x4", "x2", "-", "/2", "/4", "/8"],
 		),
+
+		(
+			type: \out,
+			symbol: \out,
+			numChannels: 2,
+			text: "out",
+		),
 	]
 );
 
-SynthDef(\mhPWM, { |out = 0, amp = 0.5,
+SynthDef(\gmPWM, { |out = 0, amp = 0.5,
 	freq = 440, freqMul = 1,
 	pulseWidth = 0.5,
 	modWidth = 0, modRate = 0,

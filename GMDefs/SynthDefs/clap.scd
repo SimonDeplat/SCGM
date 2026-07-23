@@ -8,6 +8,7 @@ var idDict = (
 	category: \perc,
 	type: \perc,
 	emision: \discrete,
+	group: \synth,
 	tunable: false,
 	dependencies: nil,
 

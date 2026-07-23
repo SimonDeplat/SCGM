@@ -5,6 +5,7 @@ var idDict = (
 	category: \spatialization,
 	type: \effect,
 	emission: \continuous,
+	group: \filter,
 	tunable: false,
 	dependencies: nil,
 

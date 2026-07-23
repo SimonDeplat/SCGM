@@ -5,6 +5,7 @@ var idDict = (
 	category: \drumkit,
 	type: \snare,
 	emission: \discrete,
+	group: \synth,
 	tunable: false,
 	dependencies: nil,
 

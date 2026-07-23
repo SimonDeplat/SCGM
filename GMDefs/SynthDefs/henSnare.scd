@@ -1,5 +1,3 @@
-// TO DO : ORIGINAL AUTHOR CREDIT
-
 (
 var idDict = (
 	name: "HenSnare",
@@ -7,6 +5,7 @@ var idDict = (
 	category: \drumkit,
 	type: \snare,
 	emission: \discrete,
+	group: \synth,
 	tunable: false,
 	dependencies: nil,
 

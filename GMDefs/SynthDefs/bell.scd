@@ -10,6 +10,7 @@ var idDict = (
 	category: \perc,
 	type: \tunePerc,
 	emission: \discrete,
+	group: \synth,
 	tunable: true,
 	dependencies: nil,
 

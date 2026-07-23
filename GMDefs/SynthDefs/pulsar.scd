@@ -5,8 +5,8 @@ var idDict = (
 	category: \electro,
 	type: \synth,
 	emission: \discrete,
+	group: \synth,
 	tunable: true,
-	pianoRollRange: [-3, 4],
 	dependencies: nil,
 
 	params: [

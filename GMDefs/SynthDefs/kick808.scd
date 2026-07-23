@@ -6,10 +6,10 @@ var idDict = (
 	symbol: \gmKick808,
 	category: \drumkit,
 	type: \synth,
-	emission: \discrete,
+	emission: \discrete,*
+	group: \synth,
 	tunable: true,
 	dependencies: nil,
-	numChannels: 2,
 
 	params: [
 

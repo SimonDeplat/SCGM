@@ -7,9 +7,9 @@ var idDict = (
 	category: \drumkit,
 	type: \synth,
 	emission: \discrete,
+	group: \synth,
 	tunable: false,
 	dependencies: nil,
-	numChannels: 2,
 
 	params: [
 		(

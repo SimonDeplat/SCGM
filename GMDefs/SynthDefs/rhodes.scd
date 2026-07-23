@@ -7,8 +7,8 @@ var idDict = (
 	category: \keyboard,
 	type: \synth,
 	emission: \discrete,
+	group: \synth,
 	tunable: true,
-	pianoRollRange: [-3, 4],
 	dependencies: nil,
 
 	params: [

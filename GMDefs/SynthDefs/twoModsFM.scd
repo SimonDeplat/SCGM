@@ -4,10 +4,10 @@ var idDict = (
 	symbol: \mhFMSynth,
 	category: \electro,
 	type: \discrete,
+	emission: \discrete,
+	group: \synth,
 	tunable: true,
-	pianoRollRange: [-3, 4],
 	dependencies: nil,
-	numChannels: 2,
 
 	params: [
 		(
@@ -214,6 +214,13 @@ var idDict = (
 			values: [8, 4, 2, 1, 0.5, 0.25, 0.125],
 			text: "freq mul.",
 			texts: ["x8", "x4", "x2", "-", "/2", "/4", "/8"],
+		),
+
+		(
+			type: \out,
+			symbol: \out,
+			numChannels: 2,
+			text: "out",
 		),
 	]
 );
