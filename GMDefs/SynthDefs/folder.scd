@@ -10,7 +10,6 @@ var idDict = (
 	dependencies: nil,
 
 	params: [
-
 		(
 			type: \in,
 			symbol: \in,
@@ -113,7 +112,6 @@ var idDict = (
 			numChannels: 2,
 			text: "out",
 		),
-
 	]
 );
 

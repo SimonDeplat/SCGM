@@ -44,7 +44,7 @@ var idDict = (
 );
 
 SynthDef(\gmLPF, { |out = 0, in, freq = 5000|
-	var snd = In.ar(inBus, 2);
+	var snd = In.ar(in, 2);
 	snd = LPF.ar(snd, freq);
 	Out.ar(out, snd);
 }).add;
