@@ -427,6 +427,17 @@ getParam: { |self, symbol|
 plugInto: { |self, synth, outParam = \out, inParam = \in|
 	var circular;
 
+	// IMPROVE ME:
+	// branches are reordered twice:
+	// when unplugged, then when plugged
+	// in theory, both could
+	// be reordered at the same time
+
+	// Chain to synth conversion
+	if(synth[\type] == \chain) {
+		synth = synth[\source];
+	};
+
 	// Check circularity
 	circular = [self, List(0), false];
 	circular = synth.checkCircularity(circular);
@@ -444,6 +455,12 @@ plugInto: { |self, synth, outParam = \out, inParam = \in|
 
 		// Indicate param isn't plugged externally
 		self[\extOutPlugs][outParam] = nil;
+
+		// Reference connection
+		self[\outPlugs][outParam] = (
+			synth: synth,
+			param: inParam
+		);
 
 		// Connect self to new synth
 		synth.plug(
@@ -490,6 +507,8 @@ unplug: { |self, synth, outParam, inParam|
 		});
 		if(index != -1) {
 			self[\inPlugs][inParam].removeAt(index);
+			// Notify synth from disconnection
+			synth[\outPlugs][outParam] = nil;
 			if(self[\inPlugs][inParam].size == 0) {
 				self[\inPlugs][inParam] = nil;
 			};
@@ -593,9 +612,9 @@ collectBranch: { |self, branch, startingIndex|
 		if(
 			plug.notNil
 			and:
-			{ plug[\group] == self[\group] }
+			{ plug[\synth][\group] == self[\group] }
 		) {
-			plug.collectBranch(branch, startingIndex);
+			plug[\synth].collectBranch(branch, startingIndex);
 		};
 	});
 	branch

@@ -3,6 +3,8 @@ init: { |self|
 	self
 },
 
+type: \chain,
+
 setSynths: { |self, synthNames|
 	self[\synths] = List(0);
 	self[\synthByNames] = ();
@@ -17,16 +19,12 @@ setSynths: { |self, synthNames|
 
 	self[\source] = self[\synths][0];
 
-	// Plug 'em in
-	fork {
-		s.sync;
-		(self[\synths].size - 1).do({ |index|
-			self[\synths][index].setParam(
-				\out,
-				self[\synths][index + 1][\busses][\in]
-			);
-		});
-	};
+	// Plug 'em
+	(self[\synths].size - 1).do({ |index|
+		self[\synths][index].plugInto(
+			self[\synths][index + 1]
+		);
+	});
 
 	self
 },
