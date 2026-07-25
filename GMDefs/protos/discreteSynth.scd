@@ -5,17 +5,20 @@ init: { |self, datas|
 	self[\persistent] = false;
 	self[\modulatePersistent] = false;
 
-	// DEFAULT OR NOT ?
-	/*if(self[\type] == \filePlayer) {
-		self.setPersistent(true);
-		self.setModulatePersistent(true);
-	};*/
-
 	if(self[\tunable]) {
 		self[\score] = ~gmDefs.getScaleScore;
 		self[\mixFreqs] = true;
 		self[\mixFreqsAmp] = 0.75;
 	};
+
+	// Create a group to manage
+	// nodes position in the server tree
+	self[\synth] = Group(
+		self[\target],
+		\addToTail
+	);
+
+	self[\ready] = true;
 
 	self
 },
@@ -23,7 +26,9 @@ init: { |self, datas|
 doPlay: { |self|
 	var synth = Synth(
 		self[\symbol],
-		self[\args].asPairs
+		self[\args].asPairs,
+		self[\synth],
+		\addToTail
 	);
 	if(self[\persistent]) {
 		self.registerSynth(synth);
@@ -33,7 +38,9 @@ doPlay: { |self|
 doPlayDefault: { |self|
 	var synth = Synth(
 		self[\symbol],
-		self[\defaultArgs].asPairs
+		self[\defaultArgs].asPairs,
+		self[\synth],
+		\addToTail
 	);
 	if(self[\persistent]) {
 		self.registerSynth(synth);
@@ -48,7 +55,9 @@ doPlayFreq: { |self, freq|
 	};
 	synth = Synth(
 		self[\symbol],
-		args.asArray
+		args.asArray,
+		self[\synth],
+		\addToTail
 	);
 	if(self[\persistent]) {
 		self.registerSynth(synth);
@@ -66,7 +75,9 @@ doPlayAmpFreq: { |self, amp, freq|
 	};
 	synth = Synth(
 		self[\symbol],
-		args.asPairs
+		args.asPairs,
+		self[\synth],
+		\addToTail
 	);
 	if(self[\persistent]) {
 		self.registerSynth(synth);
@@ -79,7 +90,9 @@ doPlayBuffer: { |self, buffer|
 	args[\buffer] = buffer;
 	synth = Synth(
 		self[\symbol],
-		args.asPairs
+		args.asPairs,
+		self[\synth],
+		\addToTail
 	);
 	if(self[\persistent]) {
 		self.registerSynth(synth);
@@ -97,7 +110,9 @@ doPlayAt: { |self, beat|
 
 	synth = Synth(
 		self[\symbol],
-		args.asPairs
+		args.asPairs,
+		self[\synth],
+		\addToTail
 	);
 
 	if(self[\persistent]) {
@@ -128,7 +143,9 @@ doPlayFreqsAt: { |self, beat, freqs|
 
 		synth = Synth(
 			self[\symbol],
-			argsCopy.asPairs
+			argsCopy.asPairs,
+			self[\synth],
+			\addToTail
 		);
 
 		if(self[\persistent]) {
@@ -594,21 +611,6 @@ setModulatePersistent: { |self, aBoolean|
 	if(self[\synths].isNil) {
 		self[\synths] = List(0);
 	};
-	self
-},
-
-plugInto: { |self, synth, outParam = \out, inParam = \in|
-
-	if(self[\outPlugs][outParam].notNil) {
-
-	};
-
-	self[\outPlugs][outParam] = synth;
-
-	self.setParam(
-		outParam,
-		synth[\busses][inParam]
-	);
 	self
 },
 

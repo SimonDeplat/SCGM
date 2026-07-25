@@ -8,6 +8,7 @@
 		);
 		self.loadGMDefs;
 		self.loadConstructors;
+		self.initGroups;
 		self
 	},
 
@@ -106,6 +107,49 @@
 		};
 
 		synth
+	},
+
+	//--------------//
+	//    GROUPS    //
+	initGroups: { |self|
+		self[\mainGroup] = Group(
+			self[\server].defaultGroupID,
+			\addToTail
+		);
+		self[\controlGroup] = Group(
+			self[\mainGroup],
+			\addToHead
+		);
+		self[\controlGroups] = List(0);
+		self.addControlGroup;
+		self[\sourceGroup] = Group(
+			self[\controlGroup],
+			\addAfter
+		);
+		self[\filterGroup] = Group(
+			self[\sourceGroup],
+			\addAfter
+		);
+		self[\filterGroups] = List(0);
+		self.addFilterGroup;
+	},
+
+	addControlGroup: { |self|
+		self[\controlGroups].add(
+			Group(
+				self[\controlGroup],
+				\addToTail
+			)
+		);
+	},
+
+	addFilterGroup: { |self|
+		self[\filterGroups].add(
+			Group(
+				self[\filterGroup],
+				\addToTail
+			)
+		);
 	},
 
 	//--------------------//

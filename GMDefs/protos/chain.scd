@@ -59,4 +59,14 @@ setOut: { |self, bus|
 	self[\synths].last.setParam(\out, bus);
 	self
 },
+
+plugInto: { |self, synth, outParam = \out, inParam = \in|
+	self[\synths].last.plugInto(synth, outParam, inParam);
+	self
+},
+
+plugOut: { |self, out, outParam = \out|
+	self[\synths].last.plugOut(out, outParam);
+	self
+},
 )

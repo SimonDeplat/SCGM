@@ -16,12 +16,15 @@ init: { |self, datas|
 },
 
 doPlay: { |self|
+	var lastDelayedSynth = true;
 	if(self[\synth].isNil) {
 		self[\synth] = Synth(
 			self[\symbol],
 			self[\args].asKeyValuePairs,
-			addAction: \addToTail,
+			self[\target],
+			\addToTail
 		);
+		self[\ready] = true;
 		self.emitSignal(\_synthReady);
 	};
 },
@@ -37,7 +40,9 @@ playDefault: { |self|
 	if(self[\synth].isNil) {
 		Synth(
 			self[\symbol],
-			self[\defaultArgs].asArray
+			self[\defaultArgs].asArray,
+			self[\target],
+			self[\addAction]
 		);
 	};
 },
@@ -52,7 +57,9 @@ playFreq: { |self, freq|
 		};
 		Synth(
 			self[\symbol],
-			args.asArray
+			args.asArray,
+			self[\target],
+			self[\addAction]
 		);
 		if(self[\tunable]) {
 			self.emitSignal(
@@ -77,7 +84,9 @@ playAmpFreq: { |self, amp, freq|
 		};
 		Synth(
 			self[\symbol],
-			args.asPairs
+			args.asPairs,
+			self[\target],
+			self[\addAction]
 		);
 	};
 },
