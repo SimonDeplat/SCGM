@@ -1,6 +1,6 @@
 (
 var idDict = (
-	name: "FixedConvolver",
+	name: "Fixed Convolver",
 	symbol: \gmFixedConvolver,
 	category: \effect,
 	type: \effect,
@@ -47,6 +47,34 @@ var idDict = (
 		),
 
 		(
+			type: \continuous,
+			symbol: \mix,
+			default: 0.1,
+			min: 0,
+			max: 1,
+			scale: \lin,
+			text: "mix",
+			polarity: \uni,
+			// Helpers
+			displayHelpers: true,
+			multiSliderDisplayHelpers: false,
+			helpersStyle: \line,
+			centerHelpers: false,
+			helpersRatio: 0.333,
+			helpersNumber: 3,
+			helperSubdivisions: 4,
+			// Mod Steps
+			modStep: 0.01,
+			modStepOperator: \add,
+			modStep2: 2,
+			modStep2Operator: \mul,
+			// DisplayFunc
+			displayFunction: { |value|
+				((value * 100).asInteger.asString ++ " %")
+			},
+		),
+
+		(
 			type: \kernel,
 			symbol: \kernel,
 			channels: 1,
@@ -63,16 +91,20 @@ var idDict = (
 );
 
 SynthDef(\gmFixedConvolver, { |out = 0, amp = 1, in,
+	mix = 1,
 	kernel, kernelSize = 8192, kernelUpdate = 0|
-	var snd, resp;
+	var snd, effect, resp;
 	snd = In.ar(in, 2);
-	snd = Convolution2.ar(
+	effect = Convolution2.ar(
 		snd,
 		kernel,
 		kernelUpdate,
 		kernelSize,
 		amp
 	);
+	snd = snd * (1 - mix);
+	effect = effect * mix;
+	snd = snd + effect;
 	snd = Limiter.ar(snd);
 	Out.ar(out, snd);
 }).add;
