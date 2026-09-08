@@ -55,6 +55,16 @@ displayFrame: { |self, boolean|
 	self
 },
 
+setMaxWidth: { |self, width|
+	self[\view].maxWidth_(width);
+	self
+},
+
+setMaxHeight: { |self, height|
+	self[\view].maxHeight_(height);
+	self
+},
+
 //---------//
 // SIGNALS //
 emitSignal: { |self, symbol, args = nil|
@@ -99,7 +109,6 @@ setStyles: { |self, style, textStyle, widgetStyle|
 
 //------//
 // MISC //
-
 removed: false,
 doRemove: { |self|
 	if(self[\view].notNil) {
