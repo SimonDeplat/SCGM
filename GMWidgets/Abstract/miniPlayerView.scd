@@ -47,7 +47,7 @@ initView: { |self|
 	.string_("player");
 
 	self.initPlayStopButton;
-	self.initTapTempo;
+	self.initTempo;
 	self.initNoteSelector;
 	self.initScaleSelector;
 	self.initRhythmSwitch;
@@ -57,12 +57,12 @@ initView: { |self|
 	.layout_(
 		VLayout()
 		.margins_(0)
-		.spacing_(0)
+		.spacing_(5)
 		.add(self[\title], 1)
 		.add(
 			HLayout()
 			.margins_(0)
-			.spacing_(0)
+			.spacing_(5)
 			.add(self[\noteSelector][\view], 5)
 			.add(self[\scaleSelector][\view], 1),
 			2
@@ -70,9 +70,10 @@ initView: { |self|
 		.add(
 			HLayout()
 			.margins_(0)
-			.spacing_(0)
+			.spacing_(5)
 			.add(self[\playStopButton][\view], 1)
-			.add(self[\tapTempo][\view], 5)
+			.add(self[\tempoSlider][\view], 1)
+			.add(self[\tapTempo][\view], 1)
 			.add(self[\rhythmSwitch][\view], 1),
 			2
 		)
@@ -95,12 +96,27 @@ initPlayStopButton: { |self|
 	.setMaxWidth(256);
 },
 
-initTapTempo: { |self|
+initTempo: { |self|
 	self[\tapTempo] = ~gmWidgets.getTapTempo
+	.setMaxWidth(128)
 	.connectSignal(
 		\_bpmChanged,
 		{ |bpm|
 			self[\player].setBPM(bpm);
+		},
+		self
+	);
+	self[\tempoSlider] = ~gmWidgets.getSymbolSlider
+	.orientation(\horizontal)
+	.displayFunction({ |value|
+		value.asInteger.asString
+	})
+	.min(30)
+	.max(140)
+	.connectSignal(
+		\_valueChanged,
+		{ |bpm|
+			self[\player].setBPM(bpm.asInteger);
 		},
 		self
 	);
@@ -164,16 +180,16 @@ connectPlayer: { |self, player|
 		player[\isPlaying]
 	);
 
-	self[\tapTempo].bpm(
-		player[\bpm]
-	);
-
 	self[\playStopButton].connectPlayer(player);
+
+	self[\tapTempo].bpm(player[\bpm]);
+	self[\tempoSlider].setValue(player[\bpm]);
 
 	player.connectSignal(
 		\_bpmChanged,
 		{ |bpm|
 			self[\tapTempo].bpm(bpm);
+			self[\tempoSlider].setValue(bpm);
 		},
 		self
 	);
@@ -254,6 +270,11 @@ setStyles: { |self, style, textStyle, widgetStyle|
 		widgetStyle
 	);
 	self[\tapTempo].setStyles(
+		style,
+		textStyle,
+		widgetStyle
+	);
+	self[\tempoSlider].setStyles(
 		style,
 		textStyle,
 		widgetStyle
