@@ -25,7 +25,7 @@ initRhythm: { |self|
 	self[\bpm] = 60;
 	self[\beat] = 0;
 	self[\divisions] = [4, 4, 4, 4];
-	self[\clock] = TempoClock.tempo_(
+	self[\clock] = TempoClock().tempo_(
 		self[\bpm] / 60
 	);
 	self[\isPlaying] = false;
@@ -137,10 +137,18 @@ setRhythm: { |self, divisions|
 	self
 },
 
+getRhythm: { |self|
+	self[\divisions]
+},
+
 //------//
 // FREQ //
 setTuningHz: { |self, freq|
 	self[\tuning] = freq / 440;
+	self.emitSignal(
+		\_tuningChanged,
+		self[\tuning]
+	);
 	self.emitSignal(
 		\_freqChanged,
 		self[\freq] * self[\tuning]
@@ -148,13 +156,25 @@ setTuningHz: { |self, freq|
 	self
 },
 
+getTuningHz: { |self|
+	(self[\tuning] * 440)
+},
+
 setTuning: { |self, tuning|
 	self[\tuning] = tuning;
+	self.emitSignal(
+		\_tuningChanged,
+		self[\tuning]
+	);
 	self.emitSignal(
 		\_freqChanged,
 		self[\freq] * self[\tuning]
 	);
 	self
+},
+
+getTuning: { |self|
+	self[\tuning]
 },
 
 setFreq: { |self, freq|
@@ -166,6 +186,10 @@ setFreq: { |self, freq|
 	self
 },
 
+getFreq: { |self|
+	self[\freq]
+},
+
 setScale: { |self, scale|
 	self[\scale] = scale;
 	self.emitSignal(
@@ -173,6 +197,10 @@ setScale: { |self, scale|
 		self[\scale]
 	);
 	self
+},
+
+getScale: { |self|
+	self[\scale]
 },
 
 //--------//
@@ -187,6 +215,10 @@ setBPM: { |self, bpm|
 		self[\bpm]
 	);
 	self
+},
+
+getBPM: { |self|
+	self[\bpm]
 },
 
 doPlay: { |self|
