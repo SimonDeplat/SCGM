@@ -49,10 +49,10 @@ var idDict = (
 		(
 			type: \continuous,
 			symbol: \threshold,
-			default: 1,
-			min: 0,
-			max: 3,
-			scale: \lin,
+			default: 2,
+			min: 60.neg.dbamp,
+			max: 2,
+			scale: \exp,
 			text: "threshold",
 			polarity: \uni,
 			// Helpers
